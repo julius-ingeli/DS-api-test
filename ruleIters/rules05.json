@@ -1,0 +1,188 @@
+{
+  "version": "0.5",
+  "engine": {
+    "normalization": {
+      "lowercase": true,
+      "strip_diacritics": true,
+      "collapse_whitespace": true,
+      "remove_punctuation": true
+    },
+    "matching": {
+      "mode": "substring",
+      "token_boundary_regex": false
+    }
+  },
+  "description": " Rozhodovaci strom na presmerovanie zakaznika k relevantnym benefitom na zaklade symptomov.",
+  "input": {
+    "type": "object",
+    "properties": {
+      "symptom_source": {
+        "type": "string",
+        "enum": [
+          "predefined_option",
+          "free_text"
+        ]
+      },
+      "symptom_value": {
+        "type": "string",
+        "description": "Predvolena moznost alebo volno-textovo zadane symptomy od zakaznika."
+      }
+    },
+    "required": [
+      "symptom_source",
+      "symptom_value"
+    ]
+  },
+  "logic": {
+    "type": "rule_based",
+    "rules": [
+      {
+        "id": "rule_skin",
+        "description": "Kozne symptomy presmerujuce na AIP_DERM.",
+        "match_type": "keyword_any",
+        "keywords": [
+          "koza","koze","kozu","kozou","kozi","kozach","kozami","kozam","kozny","kozne","kozna","kozneho","koznom","koznymi","koznych","kozny problem","kozne problemy","kozneho problemu","koznom probleme","koznymi problemami","koznych problemov","koz",
+          "vyraska","vyrasky","vyrasku","vyraske","vyraskach","vyraskami","vyrask","akne",
+          "ekzem","ekzemu","ekzemy","ekzemom","ekzemoch","ekzemov","ekzemami","ekzem",
+          "dermatitida","dermatitidy","dermatitide","dermatitidu","dermatitidou","dermatitidach","dermatitid",
+          "flak","flaku","flaky","flakom","flakoch","flaky","flakmi",
+          "pupienok","pupienka","pupienky","pupienku","pupienkom","pupienkoch","pupienkami","pupienk",
+          "svrbenie","svrbenia","svrbeniu","svrbenim","svrbeni","svrb",
+          "opar","oparu","opare","oparom","opary","oparoch",
+          "herpes","herpesu","herpese","herpesom","herpesy","herpesoch",
+          "bradavica","bradavice","bradavici","bradavicu","bradavicou","bradaviciach","bradavic","bradavicami",
+          "psoriaza","psoriazy","psoriaze","psoriazu","psoriazou","psoriazach","psoriaz",
+          "mykoza","mykozy","mykoze","mykozu","mykozou","mykozach","mykoz",
+          "plesen","plesne","plesni","plesenou","plesniach","plesnami","plesn",
+          "lupina","lupiny","lupin","lupine","lupinami","lupinach","lupinam","lupin",
+          "sucha koza","suchej koze","suchu kozu","suchou kozou","suchych kozach","such",
+          "zacervenanie","zacervenania","zacervenaniu","zacervenanim","zacervenani","zacervenan",
+          "zihlavka","zihlavky","zihlavke","zihlavku","zihlavkou","zihlavkach","zihlaviek","zihlavk",
+          "alergicka reakcia","alergickej reakcie","alergickej reakcii","alergicku reakciu","alergickou reakciou","alergickych reakcii","alergickymi reakciami","alergickych reakciach","alergick","reakcia","reakcie","reakcii","reakciu","reakciou","reakciami","reakci",
+          "stipanec","stipanca","stipanci","stipancom","stipancoch","stipancomi","stipan","stipanie","stipania","stipaniu","stipanim","stipani",
+          "uhryznutie","uhryznutia","uhryznuti","uhryznutiu","uhryznutim","uhryznutiach","uhryznut",
+          "popalenina","popaleniny","popalenine","popaleninu","popaleninou","popaleninach","popaleninami","popalenin",
+          "omrzlina","omrzliny","omrzline","omrzlinu","omrzlinou","omrzlinach","omrzlinami","omrzlin",
+          "kurie oko","kurie oci","kuriom oku","kuriom ocom","kurich ociach","kurich oci","kurie ok",
+          "mozol","mozola","mozole","mozolu","mozolom","mozoloch","mozlami","mozol",
+          "prasklina","praskliny","praskline","prasklinu","prasklinou","prasklinach","prasklinami","prasklin","praskliny na kozi","prasklin na kozi","prasklinami na kozi",
+          "rosacea",
+          "ruzovka","ruzovky","ruzovke","ruzovku","ruzovkou","ruzovkach","ruzovk"
+        ],
+        "output_benefit": "AIP_DERM"
+      },
+      {
+        "id": "rule_musculoskeletal",
+        "description": "Problemy so svalstvom alebo kostami su presmerovane na AIP_FYZIO.",
+        "match_type": "keyword_any",
+        "keywords": [
+          "koleno","kolena","kolene","kolenom","kolien","kolenach","kolenam","kolenami","kolen",
+          "bolest kolena","bolesti kolena","bolest kolene","bolesti kolien","bolestiach kolena","bolesti v kolene","bolesti v kolenach","bolest kolien",
+          "rameno","ramena","ramene","ramenom","ramien","ramenach","ramenam","ramenami","ramen",
+          "bolest ramena","bolesti ramena","bolest ramene","bolesti ramen","bolesti v ramene",
+          "chrbat","chrbta","chrbte","chrbtom","chrbtov","chrbtach","chrbtami","chrbt",
+          "bolest chrbta","bolesti chrbta","bolest chrbte","bolesti v chrbte","bolesti chrbtice",
+          "krize","krizov","krizom","krizach","v krizi","v krizo ch","kriz",
+          "bolest krizov","bolesti krizov","bolest v krizi",
+          "krk","krku","krkom","krky","krkoch",
+          "chrbtica","chrbtice","chrbtici","chrbticu","chrbticou","chrbticiach","chrbtic",
+          "sval","svalu","svale","svaly","svaloch","svalom","svalmi","sval",
+          "bolest svalov","bolesti svalov","bolest svalu","bolesti svalstva","svalove bolesti",
+          "svalovica","svalovice","svalovici","svalovicu","svalovicou","svaloviciach","svalovic",
+          "svalovy spazmus","svalove spazmy","svaloveho spazmu","svalovom spazme","spazmus","spazmu","spazmy","spazmom","spazmoch","spazm",
+          "krc","krca","krce","krcu","krcmi","krcoch","krcovity","krc",
+          "stuhnuty krk","stuhnuteho krku","stuhnutom krku","stuhnute krky","stuhnutym krkom","stuhnutie krku","stuhnut",
+          "seklo ma","seklo mi","seklo ma v chrbte","seklo ma v krizi","seklo mi v krku","seklo",
+          "ischias","ischiasu","ischiasom","ischiase",
+          "podvrtnutie","podvrtnutia","podvrtnuti","podvrtnutiu","podvrtnutim","podvrtnutiach","podvrtnut",
+          "vyron","vyronu","vyrony","vyronom","vyronoch","vyron",
+          "natiahnutie svalu","natiahnute svaly","natiahnuty sval","natiahnutia svalu","natiahnutych svalov","natiahnut sval","natiahnut",
+          "tenisovy laket","tenisoveho lakta","tenisovom lakti","tenisove lakte","tenisovych laktoch","laket","lakta","lakti","lakti","laketmi","laktoch","laket",
+          "golfovy laket","golfoveho lakta","golfovom lakti","golfove lakte","golfovych laktoch",
+          "karpalny tunel","karpalneho tunela","karpalnom tuneli","karpalne tunely","karpalnych tuneloch","karpaln","tunel","tunela","tuneli","tunelom","tuneloch",
+          "achilovka","achilovky","achilovke","achilovku","achilovkou","achilovkach","achilovk","achilova slacha","achilovej slachy","achilovu slachu","achilovou slachou","achilovych slachach","slacha","slachy","slache","slachu","slachou","slachach","slachami","slach",
+          "clenok","clenka","clenku","clenkom","clenky","clenkoch","clenkov","clenkami","clenk",
+          "bedro","bedra","bedre","bedrom","bedier","bedrach","bedrami","bedr",
+          "trieslo","triesla","triesle","trieslom","triesiel","trieslach","trieslami","triesl",
+          "lytko","lytka","lytkam","lytkach","lytkom","lytok","lytkami","lytk",
+          "stehno","stehna","stehne","stehnom","stehen","stehna","stehnoch","stehn",
+          "zapastie","zapastia","zapastiu","zapastim","zapastia","zapastiach","zapast","zapestie","zapastia",
+          "lopatka","lopatky","lopatke","lopatku","lopatkou","lopatkach","lopatk",
+          "bolest klbov","bolesti klbov","bolest klbu","bolesti klbu","bolesti v klboch","klb","klbu","klbom","klby","klboch",
+          "artritida","artridity","artritide","artritidu","artritidou","artritidach","artritid",
+          "tendinitida","tendinitidy","tendinitide","tendinitidu","tendinitidou","tendinitidach","tendinitid",
+          "slacha","slachy","slache","slachu","slachou","slachach","slachami","slach",
+          "plantarna fasciitida","plantarnej fasciitidy","plantarnej fasciitide","plantarnu fasciitidu","plantarnou fasciitidou","plantarnych fasciitidach","fasciitida","fasciitidy","fasciitide","fasciitidu","fasciitidou","fasciitidach","fasciitid","plantarn"
+        ],
+        "output_benefit": "AIP_FYZIO"
+      },
+      {
+        "id": "rule_psychological",
+        "description": "Psychologicke alebo poruchy mentalneho zdravia su presmerovane na Psychologicke poradenstvo.",
+        "match_type": "keyword_any",
+        "keywords": [
+          "psychicka nepohoda","psychickej nepohody","psychickej nepohode","psychicku nepohodu","psychickou nepohodou","psychickych nepohodach","psychickymi nepohodami","psychick",
+          "depresia","depresie","depresii","depresiu","depresiou","depresiach","depresiami","depres",
+          "citim sa deprimovane","citim sa deprimovany","citim sa deprimovana","citim sa deprimovanym","citim sa deprimovanou","deprimovany","deprimovana","deprimovanym","deprimovanou","deprimovan",
+          "uzkost","uzkosti","uzkostiami","uzkostiou","uzkostiach","uzkostiam","uzkost",
+          "uzkosti","uzkostny","uzkostne","uzkostna",
+          "panika","paniky","panike","paniku","panikou","panikach","panikami","panik",
+          "stres","stresu","stresom","strese","stresy","stresoch","stresmi",
+          "vyhorenie","vyhorenia","vyhoreniu","vyhorenim","vyhoreni","vyhoreniach","vyhoren",
+          "burnout","burnoutu","burnoutom","burnoute","burnouty","burnoutoch",
+          "psychicke problemy","psychickeho problemu","psychickom probleme","psychickych problemov","psychickymi problemami","psychickom problemoch","psychick","problem","problemu","problemy","problemoch","problemami",
+          "psychika","psychiky","psychike","psychiku","psychikou","psychikach",
+          "nespavost","nespavosti","nespavostou","nespavostiach",
+          "insomnia","insomnie","insomnii","insomniu","insomniou","insomniach",
+          "poruchy spanku","poruch spanku","poruche spanku","poruchami spanku","poruchach spanku","porucha spanku","poruchy spania","porucha spania","spanku","spanok","spanku","spankom","spankoch","span",
+          "strach","strachu","strachom","strache","strachy","strachoch",
+          "napatie","napatia","napatiu","napatim","napati","napat",
+          "som v strese","citim stres","mam stres",
+          "znepokojenie","znepokojenia","znepokojeniu","znepokojenim","znepokojeni",
+          "precitlivenost","precitlivenosti","precitlivenostou","precitlivenostiach",
+          "unava z pretazenia","unavy z pretazenia","unave z pretazenia","unavou z pretazenia","unav","pretazenie","pretazenia","pretazeni","pretazenim",
+          "strata motivacie","straty motivacie","strate motivacie","stratou motivacie","motivacia","motivacie","motivacii","motivaciou",
+          "strata zaujmu","straty zaujmu","strate zaujmu","stratou zaujmu","zaujem","zaujmu","zaujmom","zaujmy","zaujmoch",
+          "anhedonia","anhedonie","anhedonii","anhedoniu","anhedoniou","anhedoniach",
+          "nizke sebavedomie","nizsieho sebavedomia","nizkemu sebavedomiu","nizsim sebavedomim","nizkym sebavedomim","nizkeho sebavedomia","sebavedomie","sebavedomia","sebavedomiu","sebavedomim",
+          "kriza","krizy","krize","krizu","krizou","krizach","krizami","kriz",
+          "zivotna kriza","zivotnej krizy","zivotnej krize","zivotnu krizu","zivotnou krizou","zivotnych krizach","zivotnych kriz",
+          "trauma","traumy","traume","traumu","traumou","traumach","traum",
+          "smutok","smutku","smutkom","smutky","smutkoch","smut",
+          "zarmutok","zarmutku","zarmutkom","zarmutky","zarmutkoch","zarmut"
+        ],
+        "output_benefit": "Psychologicke poradenstvo"
+      },
+      {
+        "id": "rule_fallback",
+        "description": "V pripade nejasnosti symptomov alebo moznost pre lekara na dialku.",
+        "match_type": "fallback",
+        "output_benefit": "Lekar na dialku"
+      }
+    ],
+    "evaluation_strategy": {
+      "type": "multi_match",
+      "description": "Zhodnoti vsetky benefity mimo LND, zoberie vsetky vystupne benefity bez duplikacie. Ak neexistuje zhoda, vystup je LND."
+    }
+  },
+  "predefined_options": [
+    {
+      "id": "opt_bolest_brucha",
+      "label": "Bolest brucha",
+      "example_symptom_value": "bolest brucha",
+      "note": "Typicky bude presmerovane na Lekara na dialku, pokial to nie je inde specificky pridane."
+    },
+    {
+      "id": "opt_kozne_problemy",
+      "label": "kozne problemy",
+      "example_symptom_value": "kozny problem",
+      "note": "Priradi moznost rule_skin → AIP DERM."
+    },
+    {
+      "id": "opt_bolest_kolena",
+      "label": "bolest kolena",
+      "example_symptom_value": "bolest kolena",
+      "note": "Priradi moznost rule_musculoskeletal → AIP FYZIO."
+    }
+  ]
+}

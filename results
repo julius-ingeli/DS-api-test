@@ -1,0 +1,198 @@
+---FIRST MATCH S EXCLUDE---
+
+✓ 14/20 
+??? 3/20
+xxx 3/20
+
+krc po jedle
+Alergologia ✓
+
+krc v lytku
+AIP_FYZIO ✓
+
+nafukovanie po jedle
+Alergologia ✓
+
+nafukovanie a plynatost
+Gastroenterologia ✓
+
+bolest brucha po jedle
+Diabetologia ??? (ock. Gastroenterologia)
+
+bolest brucha a krc
+AIP_FYZIO xxxx (ock. Gastroenterologia/Alergologia)
+
+vyrazka po jedle
+AIP_derm ??? (ock. Alergologia)
+
+vyrazka na kozi
+AIP_DERM ✓
+
+svrbenie koze po jedle
+AIP_DERM xxx (ock. Alergologia)
+
+svrbenie koze
+AIP_DERM ✓
+
+horucka a kasel
+Vseobecny lekar ✓
+
+horucka a palenie pri moceni
+Urologia ✓
+
+kasel a busenie srdca
+Kardiologia ✓
+
+bolest na hrudi a dychavicnost
+Kardiologia ✓
+
+busenie srdca po strese
+Psychologicke poradenstvo ??? (ock. Kardiologia)
+
+palenie pri moceni a caste mocenie
+Urologia ✓
+
+bolest zuba a opuch dasna
+Stomatologia ✓
+
+rozmazane videnie a bolest oka
+Diabetologia xxx (ock. Oftalmologia)
+
+som unaveny a je mi zle
+Vseobecny lekar ✓
+
+neviem co mi je
+fallback ✓
+
+
+---SKORING MODEL---
+
+
+✓ 17/20 
+??? 2/20
+xxx 1/20
+
+krc po jedle
+Alergologia ✓
+
+krc v lytku
+AIP_FYZIO ✓
+
+nafukovanie po jedle
+Alergologia ✓
+
+nafukovanie a plynatost
+Gastroenterologia ✓
+
+bolest brucha po jedle
+Diabetologia ??? (ock. Gastroenterologia)
+
+bolest brucha a krc
+Diabetologia xxxx (ock. Gastroenterologia/Alergologia)
+
+vyrazka po jedle
+Alergologia ✓
+
+vyrazka na kozi
+AIP_DERM ✓
+
+svrbenie koze po jedle
+Diabetologia ??? (ock. Alergologia)ň
+
+svrbenie koze
+AIP_DERM ✓
+
+horucka a kasel
+Vseobecny lekar ✓
+
+horucka a palenie pri moceni
+Urologia ✓
+
+kasel a busenie srdca
+Kardiologia ✓
+
+bolest na hrudi a dychavicnost
+Kardiologia ✓
+
+busenie srdca po strese
+Kardiologia ✓
+
+palenie pri moceni a caste mocenie
+Urologia ✓
+
+bolest zuba a opuch dasna
+Stomatologia ✓
+
+rozmazane videnie a bolest oka
+Oftalmologia ✓
+
+som unaveny a je mi zle
+Vseobecny lekar ✓
+
+neviem co mi je
+fallback ✓
+
+---TEST 2---
+
+mam vyrazku
+AIP_DERM ✓
+
+ekzem na rukach
+AIP_DERM ✓
+
+bolest kolena pri chodzi
+AIP_FYZIO ✓
+
+stuhnuty krk a bolest ramena
+AIP_FYZIO ✓
+
+krc po jedle
+Alergologia ??? (ock. fallback)
+
+hnacka po jedle a nafukovanie
+Alergologia ??? (ock. fallback)
+
+palenie pri moceni a caste mocenie
+Urologia ✓
+
+bolest zuba a opuch dasna
+Stomatologia ✓
+
+rozmazane videnie a bolest oka
+fallback xxx (ock. OFtalmologia)
+
+bolest na hrudi a dychavicnost
+Kardiologia ✓
+
+svrbenie koze po jedle
+Diabetologia xxx (ock. fallback)
+
+vyrazka po jedle
+Alergologia xxx (ock.fallback)
+
+bolest brucha a krc
+fallback ✓
+
+busenie srdca po strese
+fallback ✓
+
+unava a rozmazane videnie
+fallback ✓
+
+horucka a palenie pri moceni a bolest v krizoch
+Urologia xxx (ock. fallback)
+
+krc po jedle a nafukovanie
+Alergologia ??? (ock. fallback)
+
+nafukovanie a bolest po mastnom jedle
+fallback ✓
+
+horucka a kasel a bolest hrdla
+fallback ✓
+
+neviem co mi je
+fallback ✓
+
+---TEST 3---
+

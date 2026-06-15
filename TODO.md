@@ -1,0 +1,5 @@
+- [x] Update DŠ na novú verziu
+- [x] exploruj skóring model pre decision engine
+- [x] excepton keywords exploration
+- [x] dokumentácia dokumentácia dokumentácia
+- [x] AI VIZUALIZÁCIE AI VIZUALIZÁCIE AI VIZUALIZÁCIE AI VIZUALIZÁCIE AI VIZUALIZÁCIE AI VIZUALIZÁCIE
