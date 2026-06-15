@@ -1,6 +1,6 @@
 # Benefit Router API
 
-Benefit Router API is a small FastAPI service for public testing of symptom-to-benefit routing. A user enters symptom text, the engine evaluates it against `rules/rules.json`, and the API returns a selected category, service/clinic suggestions, a benefit, and trace data.
+Benefit Router API is a small FastAPI service for public testing of symptom-to-benefit routing. A user enters symptom text, the engine evaluates it against `rules/rules.json`, and the API returns a selected category, service/clinic suggestions, a benefit, trace data, and a timestamp-based `user_id` that is also written to the route log.
 
 This README is intentionally bilingual. Slovak documentation is first, English documentation follows.
 
@@ -22,6 +22,7 @@ Projekt nepouziva LLM ani generativne hadanie. Vysledok je deterministicky a zal
 - Pydantic request/response modely v `app/models.py`
 - Pravidla v `rules/rules.json`
 - Verejnu testovaciu HTML stranku v `app/static/index.html`
+- JSONL request logging v `app/request_logger.py`
 - Render konfiguraciu v `render.yaml`
 - Volitelny Dockerfile pre kontajnerovy beh
 
@@ -48,6 +49,7 @@ https://ds-api-test-9vyd.onrender.com/
 
 Stranka zobrazi pole na zadanie symptomov a output panel s hodnotami:
 
+- `user_id`
 - `category`
 - `clinic_1`
 - `clinic_2`
@@ -89,6 +91,7 @@ Priklad uspechu:
 
 ```json
 {
+  "user_id": "20260615T142530123456Z",
   "category": "AIP_DERM",
   "clinic_1": "Lekár na diaľku (Dermatológ)",
   "clinic_2": "AIP Derm",
@@ -192,6 +195,41 @@ Volitelne polia:
 
 Fallback pravidlo musi mat `match_type: "fallback"` a vystupne polia `category`, `clinic_1`, `clinic_2`, `benefit`.
 
+
+## Logovanie vstupov a vystupov
+
+Kazde volanie `POST /route` alebo `GET /route` dostane timestamp-based `user_id`, napriklad `20260615T142530123456Z`. Ten isty identifikator je vrateny v API odpovedi aj zapisany do logu.
+
+Log je JSON Lines subor. Kazdy riadok je jeden request:
+
+```json
+{
+  "user_id": "20260615T142530123456Z",
+  "timestamp_utc": "2026-06-15T14:25:30.123456Z",
+  "method": "POST",
+  "input": {
+    "symptom_source": "free_text",
+    "symptom_value": "mam vyrazku na kozi"
+  },
+  "output": {
+    "user_id": "20260615T142530123456Z",
+    "category": "AIP_DERM",
+    "clinic_1": "Lekár na diaľku (Dermatológ)",
+    "clinic_2": "AIP Derm",
+    "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+  }
+}
+```
+
+Konfiguracia cez environment variables:
+
+| Premenna | Default | Popis |
+| --- | --- | --- |
+| `LOG_ROUTE_REQUESTS` | `true` | Zapne/vypne zapis route logov |
+| `ROUTE_LOG_PATH` | `logs/route_requests.jsonl` | Cesta k JSONL log suboru |
+
+Poznamka pre Render: bez persistent disku je filesystem ephemeral. Log subor funguje pocas behu instancie, ale moze sa stratit pri restarte alebo redeployi. Pre trvale auditne logy pouzi Render Persistent Disk, databazu, alebo externy log stream.
+
 ## Lokalny beh bez Dockeru
 
 ```bash
@@ -263,6 +301,7 @@ app/
   engine.py            scoring and routing engine
   utils.py             text normalization
   models.py            request/response models
+  request_logger.py    JSONL route request logging
   config.py            rules loading at startup
   static/index.html    public test UI
 clients/call.py        manual Python API client
@@ -278,6 +317,7 @@ requirements.txt       Python dependencies
 - `CORS_ALLOW_ORIGINS` je defaultne `*`, co je vhodne na public testovanie. Pre produkciu nastav konkretne domeny.
 - API nema autentifikaciu. Ak bude endpoint verejne pouzivany mimo testovania, zvaz API key alebo rate limiting.
 - Odpoved obsahuje `trace`, ktory je uzitocny pre testovanie. Pre produkcne pouzitie sa da skryt alebo rozdelit na debug endpoint.
+- Route logy obsahuju symptomove vstupy. Ber ich ako citlive data a nezverejnuj log subor bez kontroly pristupu.
 
 ---
 
@@ -285,7 +325,7 @@ requirements.txt       Python dependencies
 
 ## Overview
 
-Benefit Router API is a lightweight REST service with a public testing page. A user enters symptoms, the app normalizes the text, evaluates it against `rules/rules.json`, and returns a selected category, two service/clinic suggestions, a benefit, and trace data.
+Benefit Router API is a lightweight REST service with a public testing page. A user enters symptoms, the app normalizes the text, evaluates it against `rules/rules.json`, and returns a selected category, two service/clinic suggestions, a benefit, trace data, and a timestamp-based `user_id` that is also written to the route log.
 
 The project does not use an LLM or generative guessing. The result is deterministic and depends only on the JSON rules and the matching logic in the code.
 
@@ -297,6 +337,7 @@ The project does not use an LLM or generative guessing. The result is determinis
 - Pydantic request/response models in `app/models.py`
 - Rules in `rules/rules.json`
 - Public test page in `app/static/index.html`
+- JSONL request logging in `app/request_logger.py`
 - Render deployment config in `render.yaml`
 - Optional Dockerfile for container deployment
 
@@ -323,6 +364,7 @@ https://ds-api-test-9vyd.onrender.com/
 
 The page shows a symptom input and an output panel with:
 
+- `user_id`
 - `category`
 - `clinic_1`
 - `clinic_2`
@@ -364,6 +406,7 @@ Example successful response:
 
 ```json
 {
+  "user_id": "20260615T142530123456Z",
   "category": "AIP_DERM",
   "clinic_1": "Lekár na diaľku (Dermatológ)",
   "clinic_2": "AIP Derm",
@@ -467,6 +510,41 @@ Optional fields:
 
 The fallback rule must have `match_type: "fallback"` and output fields `category`, `clinic_1`, `clinic_2`, and `benefit`.
 
+
+## Input/output logging
+
+Every `POST /route` or `GET /route` call receives a timestamp-based `user_id`, for example `20260615T142530123456Z`. The same identifier is returned in the API response and written to the log.
+
+The log is a JSON Lines file. Each line is one request:
+
+```json
+{
+  "user_id": "20260615T142530123456Z",
+  "timestamp_utc": "2026-06-15T14:25:30.123456Z",
+  "method": "POST",
+  "input": {
+    "symptom_source": "free_text",
+    "symptom_value": "mam vyrazku na kozi"
+  },
+  "output": {
+    "user_id": "20260615T142530123456Z",
+    "category": "AIP_DERM",
+    "clinic_1": "Lekár na diaľku (Dermatológ)",
+    "clinic_2": "AIP Derm",
+    "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+  }
+}
+```
+
+Configuration through environment variables:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `LOG_ROUTE_REQUESTS` | `true` | Enables/disables route log writes |
+| `ROUTE_LOG_PATH` | `logs/route_requests.jsonl` | Path to the JSONL log file |
+
+Render note: without a persistent disk, the filesystem is ephemeral. The log file works during the lifetime of the running instance, but it can be lost on restart or redeploy. For durable audit logs, use a Render Persistent Disk, a database, or an external log stream.
+
 ## Run locally without Docker
 
 ```bash
@@ -538,6 +616,7 @@ app/
   engine.py            scoring and routing engine
   utils.py             text normalization
   models.py            request/response models
+  request_logger.py    JSONL route request logging
   config.py            rules loading at startup
   static/index.html    public test UI
 clients/call.py        manual Python API client
@@ -553,3 +632,4 @@ requirements.txt       Python dependencies
 - `CORS_ALLOW_ORIGINS` defaults to `*`, which is convenient for public testing. For production, set explicit domains.
 - The API has no authentication. If the endpoint is used beyond testing, consider an API key or rate limiting.
 - Responses include `trace`, which is useful for testing. For production use, it can be hidden or moved behind a debug endpoint.
+- Route logs contain symptom input. Treat them as sensitive data and do not expose the log file without access control.

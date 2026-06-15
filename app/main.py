@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from app.models import RouteRequest, RouteResponse
 from app.engine import route_symptoms
+from app.request_logger import log_route_result
 from app.config import cfg
 
 app = FastAPI(
@@ -27,6 +28,11 @@ app.add_middleware(
 )
 
 
+def _route_with_logging(method: str, symptom_source: str, symptom_value: str):
+    result = route_symptoms(symptom_source, symptom_value)
+    return log_route_result(method, symptom_source, symptom_value, result)
+
+
 @app.get("/", include_in_schema=False)
 def index():
     return FileResponse(os.path.join(os.path.dirname(__file__), "static", "index.html"))
@@ -46,7 +52,7 @@ def version():
 def route(req: RouteRequest):
     if not req.symptom_source or not req.symptom_value:
         raise HTTPException(400, "Missing 'symptom_source' or 'symptom_value'")
-    return route_symptoms(req.symptom_source, req.symptom_value)
+    return _route_with_logging("POST", req.symptom_source, req.symptom_value)
 
 
 @app.get("/route", response_model=RouteResponse)
@@ -54,4 +60,4 @@ def route_get(
     symptom_value: str = Query(..., min_length=1),
     symptom_source: str = Query("free_text")
 ):
-    return route_symptoms(symptom_source, symptom_value)
+    return _route_with_logging("GET", symptom_source, symptom_value)

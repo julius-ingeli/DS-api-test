@@ -13,3 +13,7 @@ services:
         value: rules/rules.json
       - key: CORS_ALLOW_ORIGINS
         value: "*"
+      - key: LOG_ROUTE_REQUESTS
+        value: "true"
+      - key: ROUTE_LOG_PATH
+        value: logs/route_requests.jsonl

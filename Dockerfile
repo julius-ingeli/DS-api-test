@@ -10,6 +10,8 @@ COPY rules ./rules
 
 ENV RULES_JSON_PATH=rules/rules.json
 ENV PORT=3000
+ENV LOG_ROUTE_REQUESTS=true
+ENV ROUTE_LOG_PATH=logs/route_requests.jsonl
 
 EXPOSE 3000
 

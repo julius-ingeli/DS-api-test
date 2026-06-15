@@ -265,6 +265,10 @@
           <h2 id="output-title">Output</h2>
           <div class="summary" aria-live="polite">
             <div class="row">
+              <div class="key">User ID</div>
+              <div id="userId" class="value">-</div>
+            </div>
+            <div class="row">
               <div class="key">Category</div>
               <div id="category" class="value">-</div>
             </div>
@@ -299,6 +303,7 @@
       const rawOutput = document.querySelector("#raw-output");
 
       const fields = {
+        userId: document.querySelector("#userId"),
         category: document.querySelector("#category"),
         clinic1: document.querySelector("#clinic1"),
         clinic2: document.querySelector("#clinic2"),
@@ -310,6 +315,7 @@
       }
 
       function renderResult(data) {
+        setText(fields.userId, data.user_id);
         setText(fields.category, data.category);
         setText(fields.clinic1, data.clinic_1);
         setText(fields.clinic2, data.clinic_2);
