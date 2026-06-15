@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from app.models import RouteRequest, RouteResponse
 from app.engine import route_symptoms
-from app.config import load_rules, cfg
+from app.config import cfg
 
 app = FastAPI(
     title="Benefit Router API",
@@ -40,15 +40,6 @@ def health():
 @app.get("/version")
 def version():
     return {"version": cfg["version"]}
-
-
-@app.post("/reload")
-def reload_rules():
-    try:
-        load_rules()
-        return {"reloaded": True, "version": cfg["version"]}
-    except Exception as e:
-        raise HTTPException(422, f"Invalid rules: {str(e)}")
 
 
 @app.post("/route", response_model=RouteResponse)
