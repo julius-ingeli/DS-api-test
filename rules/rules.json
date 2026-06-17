@@ -98,7 +98,7 @@
       "Text": "OnlineClinicText.Reprogenesis"
     },
     "17": {
-      "ID": 17,
+      "ID": 8,
       "ItemName": "Dôvera pomáha",
       "Title": "OnlineClinic.Title.DoveraHelps",
       "Text": "OnlineClinicText.DoveraHelps"
@@ -395,13 +395,16 @@
           "strach",
           "precitlivenost",
           "unava",
-          "zarmutok"
+          "zarmutok",
+          "som smtutny",
+          "som smutna",
+          "smutok"
         ],
         "exclude_keywords": [],
         "category": "Psychologicke poradenstvo",
         "benefit": "Kupón Hedepy, Mojra, Ksebe, Samodiagnostika",
-        "screen_1_id": 6,
-        "screen_2_id": 5
+        "screen_1_id": 5,
+        "screen_2_id": 6
       },
       {
         "id": "rule_fallback",
@@ -882,7 +885,7 @@
         "category": "Obezitologia",
         "benefit": "Páleník jedálničky, Dr.Max, Voxberg, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie, Unilabs",
         "screen_1_id": 7,
-        "screen_2_id": 17
+        "screen_2_id": 8
       },
       {
         "id": "rule_gastrointestinal",
@@ -1010,7 +1013,14 @@
           "nespavost po porode",
           "unava po porode",
           "vycerpanie po porode",
-          "zvysena teplota po porode"
+          "zvysena teplota po porode",
+          "diastaza",
+          "diastaza po porode",
+          "problemy panvoveho dna",
+          "problemy s panvovym dnom",
+          "problemy s panvovym dnom po porode",
+          "problemy s panvovym dnom po cisarskom reze",
+          "problemy s panvovym dnom po cisarskom reze a po porode"
         ],
         "exclude_keywords": [],
         "category": "Poporodne poradenstvo",
