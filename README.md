@@ -107,7 +107,7 @@ Priklad uspechu:
   "matched_rules": ["rule_skin"],
   "selected_rule": "rule_skin",
   "fallback_used": false,
-  "version": "0.10",
+  "version": "0.11",
   "trace": {
     "normalized_input": "mam vyrazku na kozi",
     "scores": [],
@@ -155,7 +155,7 @@ Aktivny rules subor ma format:
 
 ```json
 {
-  "version": "0.10",
+  "version": "0.11",
   "screens": {
     "1": {
       "ID": 1,
@@ -458,7 +458,7 @@ Example successful response:
   "matched_rules": ["rule_skin"],
   "selected_rule": "rule_skin",
   "fallback_used": false,
-  "version": "0.10",
+  "version": "0.11",
   "trace": {
     "normalized_input": "mam vyrazku na kozi",
     "scores": [],
@@ -506,7 +506,7 @@ The active rules file has this shape:
 
 ```json
 {
-  "version": "0.10",
+  "version": "0.11",
   "screens": {
     "1": {
       "ID": 1,
