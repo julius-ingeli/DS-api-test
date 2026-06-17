@@ -1,5 +1,115 @@
 {
-  "version": "0.9",
+  "version": "0.10",
+  "screens": {
+    "1": {
+      "ID": 1,
+      "ItemName": "MEDDI (Lekár na diaľku)",
+      "Title": "OnlineClinic.Title.Meddi",
+      "Text": "OnlineClinicText.Meddi"
+    },
+    "2": {
+      "ID": 2,
+      "ItemName": "AIP Fyzio",
+      "Title": "OnlineClinic.Title.Fyzio",
+      "Text": "OnlineClinicText.Fyzio"
+    },
+    "3": {
+      "ID": 3,
+      "ItemName": "AIP Derm",
+      "Title": "OnlineClinic.Title.Derm",
+      "Text": "OnlineClinicText.Derm"
+    },
+    "4": {
+      "ID": 4,
+      "ItemName": "Samodiagnostika",
+      "Title": "OnlineClinic.Title.SelfCheck",
+      "Text": "OnlineClinicText.SelfCheck"
+    },
+    "5": {
+      "ID": 5,
+      "ItemName": "ksebe",
+      "Title": "OnlineClinic.Title.ksebe",
+      "Text": "OnlineClinicText.ksebe"
+    },
+    "6": {
+      "ID": 6,
+      "ItemName": "Hedepy+",
+      "Title": "OnlineClinic.Title.Hedepy",
+      "Text": "OnlineClinicText.Hedepy"
+    },
+    "7": {
+      "ID": 7,
+      "ItemName": "Linka pre zdravie",
+      "Title": "OnlineClinic.Title.HealthLine",
+      "Text": "OnlineClinicText.HealthLine"
+    },
+    "8": {
+      "ID": 8,
+      "ItemName": "Chronické ochorenia",
+      "Title": "OnlineClinic.Title.ChronicDiseases",
+      "Text": "OnlineClinicText.ChronicDiseases"
+    },
+    "9": {
+      "ID": 9,
+      "ItemName": "Páleník Planeat 365",
+      "Title": "OnlineClinic.Title.Planeat",
+      "Text": "OnlineClinicText.Planeat"
+    },
+    "10": {
+      "ID": 10,
+      "ItemName": "Unilabs",
+      "Title": "OnlineClinic.Title.Unilabs",
+      "Text": "OnlineClinicText.Unilabs"
+    },
+    "11": {
+      "ID": 11,
+      "ItemName": "Intim FYZIO",
+      "Title": "OnlineClinic.Title.IntimFyzio",
+      "Text": "OnlineClinicText.IntimFyzio"
+    },
+    "12": {
+      "ID": 12,
+      "ItemName": "Fokus",
+      "Title": "OnlineClinic.Title.Fokus",
+      "Text": "OnlineClinicText.Fokus"
+    },
+    "13": {
+      "ID": 13,
+      "ItemName": "Vyhľadávanie pohotovosti",
+      "Title": "OnlineClinic.Title.Emergencies",
+      "Text": "OnlineClinicText.Emergencies"
+    },
+    "14": {
+      "ID": 14,
+      "ItemName": "Zubné kefky SoniCare",
+      "Title": "OnlineClinic.Title.Sonicare",
+      "Text": "OnlineClinicText.Sonicare"
+    },
+    "15": {
+      "ID": 15,
+      "ItemName": "Repromedica",
+      "Title": "OnlineClinic.Title.Repromedica",
+      "Text": "OnlineClinicText.Repromedica"
+    },
+    "16": {
+      "ID": 16,
+      "ItemName": "Reprogenesis",
+      "Title": "OnlineClinic.Title.Reprogenesis",
+      "Text": "OnlineClinicText.Reprogenesis"
+    },
+    "17": {
+      "ID": 17,
+      "ItemName": "Dôvera pomáha",
+      "Title": "OnlineClinic.Title.DoveraHelps",
+      "Text": "OnlineClinicText.DoveraHelps"
+    },
+    "18": {
+      "ID": 18,
+      "ItemName": "Placeholder",
+      "Title": "OnlineClinic.Title.Placeholder",
+      "Text": "OnlineClinicText.Placeholder"
+    }
+  },
   "logic": {
     "rules": [
       {
@@ -183,10 +293,10 @@
           "svrbenie koze po jedle"
         ],
         "category": "AIP_DERM",
-        "clinic_1": "Lekár na diaľku (Dermatológ)",
-        "clinic_2": "AIP Derm",
-        "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
-      },      
+        "benefit": "Facederma, DNA4Fit, Ksebe zadarmo",
+        "screen_1_id": 1,
+        "screen_2_id": 3
+      },
       {
         "id": "rule_ambiguous_uro_back",
         "match_type": "keyword_any",
@@ -204,9 +314,9 @@
         },
         "min_score": 8,
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku (Urolog)",
-        "clinic_2": "IntimFYZIO",
-        "benefit": "Dr. Max, Páleník jedálničky"
+        "benefit": "Dr. Max, Páleník jedálničky",
+        "screen_1_id": 1,
+        "screen_2_id": 11
       },
       {
         "id": "rule_musculoskeletal",
@@ -263,9 +373,9 @@
           "v bruchu"
         ],
         "category": "AIP_FYZIO",
-        "clinic_1": "Lekar na dialku (ortopéd/neurológ)",
-        "clinic_2": "Dr.Max 20% off",
-        "benefit": "Jany Landl, Zľava na kúpele, Zľava na posilovne"
+        "benefit": "Jany Landl, Zľava na kúpele, Zľava na posilovne",
+        "screen_1_id": 1,
+        "screen_2_id": 2
       },
       {
         "id": "rule_psychological",
@@ -289,17 +399,17 @@
         ],
         "exclude_keywords": [],
         "category": "Psychologicke poradenstvo",
-        "clinic_1": "Hedepy+",
-        "clinic_2": "Ksebe zadarmo",
-        "benefit": "Kupón Hedepy, Mojra, Ksebe, Samodiagnostika"
+        "benefit": "Kupón Hedepy, Mojra, Ksebe, Samodiagnostika",
+        "screen_1_id": 6,
+        "screen_2_id": 5
       },
       {
         "id": "rule_fallback",
         "match_type": "fallback",
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku",
-        "clinic_2": "Samodiagnostika",
-        "benefit": "Dr. Max"
+        "benefit": "Dr. Max",
+        "screen_1_id": 1,
+        "screen_2_id": 4
       },
       {
         "id": "rule_general",
@@ -415,9 +525,9 @@
           "celiakia"
         ],
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku",
-        "clinic_2": "Samodiagnostika",
-        "benefit": "Dr. Max"
+        "benefit": "Dr. Max",
+        "screen_1_id": 1,
+        "screen_2_id": 4
       },
       {
         "id": "rule_ambiguous_food",
@@ -444,9 +554,9 @@
         },
         "min_score": 8,
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku",
-        "clinic_2": "Samodiagnostika",
-        "benefit": ""
+        "benefit": "",
+        "screen_1_id": 1,
+        "screen_2_id": 4
       },
       {
         "id": "rule_diabetes",
@@ -516,24 +626,24 @@
           "zavrat": 1
         },
         "exclude_keywords": [
-            "bolest oka",
-            "bolest oci",
-            "bolest za okom",
-            "cervene oko",
-            "cervene oci",
-            "zacervenane oko",
-            "zacervenane oci",
-            "svrbenie oci",
-            "palenie oci",
-            "konjunktivitida",
-            "zapal spojiviek",
-            "jacmen na oku"
-          ],
-        "min_score":4,
+          "bolest oka",
+          "bolest oci",
+          "bolest za okom",
+          "cervene oko",
+          "cervene oci",
+          "zacervenane oko",
+          "zacervenane oci",
+          "svrbenie oci",
+          "palenie oci",
+          "konjunktivitida",
+          "zapal spojiviek",
+          "jacmen na oku"
+        ],
+        "min_score": 4,
         "category": "Diabetologia",
-        "clinic_1": "Linka pre zdravie",
-        "clinic_2": "Lekar na dialku (diabetolog)",
-        "benefit": "Pomahame s cukrovkou, Palenik-jedalnicky, Vitacelia, Bobule, Knihy od Raabe, Knihy Pestro a zdravšie, Aplikácia s cvikmi pre diabetikov"
+        "benefit": "Pomahame s cukrovkou, Palenik-jedalnicky, Vitacelia, Bobule, Knihy od Raabe, Knihy Pestro a zdravšie, Aplikácia s cvikmi pre diabetikov",
+        "screen_1_id": 7,
+        "screen_2_id": 1
       },
       {
         "id": "rule_cardiological",
@@ -587,9 +697,9 @@
         ],
         "exclude_keywords": [],
         "category": "Kardiologia",
-        "clinic_1": "Lekar na dialku (kardiológ/internista)",
-        "clinic_2": "Linka pre zdravie",
-        "benefit": "Dôvera pomáha, Páleník jedálničky"
+        "benefit": "Dôvera pomáha, Páleník jedálničky",
+        "screen_1_id": 1,
+        "screen_2_id": 7
       },
       {
         "id": "rule_overweight",
@@ -653,9 +763,9 @@
         ],
         "exclude_keywords": [],
         "category": "Obezitologia",
-        "clinic_1": "Linka pre zdravie",
-        "clinic_2": "Dovera pomaha",
-        "benefit": "Páleník jedálničky, Dr.Max, Voxberg, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie, Unilabs"
+        "benefit": "Páleník jedálničky, Dr.Max, Voxberg, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie, Unilabs",
+        "screen_1_id": 7,
+        "screen_2_id": 17
       },
       {
         "id": "rule_gastrointestinal",
@@ -732,9 +842,9 @@
           "po jedle"
         ],
         "category": "Gastroenterologia",
-        "clinic_1": "Lekar na dialku (gastroenterolog)",
-        "clinic_2": "Palenik-jedalnicky",
-        "benefit": "Páleník jedálnčiky, Dr. Max, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie"
+        "benefit": "Páleník jedálnčiky, Dr. Max, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie",
+        "screen_1_id": 1,
+        "screen_2_id": 9
       },
       {
         "id": "rule_postbirth",
@@ -787,9 +897,9 @@
         ],
         "exclude_keywords": [],
         "category": "Poporodne poradenstvo",
-        "clinic_1": "Lekar na dialku (laktacne poradnestvo)",
-        "clinic_2": "IntimFYZIO",
-        "benefit": "Zľavy na Sudocrem, Bepanthen, Kamistand, NUK, Bebelo, Feedo (kočíky, autosedačky, detské oblečenie, výbavička), Hami, Nutrilon"
+        "benefit": "Zľavy na Sudocrem, Bepanthen, Kamistand, NUK, Bebelo, Feedo (kočíky, autosedačky, detské oblečenie, výbavička), Hami, Nutrilon",
+        "screen_1_id": 1,
+        "screen_2_id": 11
       },
       {
         "id": "rule_urological",
@@ -836,9 +946,9 @@
         ],
         "exclude_keywords": [],
         "category": "Urologia",
-        "clinic_1": "Lekar na dialku (urolog)",
-        "clinic_2": "IntimFYZIO",
-        "benefit": "Dr. Max, Páleník jedálničky"
+        "benefit": "Dr. Max, Páleník jedálničky",
+        "screen_1_id": 1,
+        "screen_2_id": 11
       },
       {
         "id": "rule_sight",
@@ -892,9 +1002,9 @@
         ],
         "exclude_keywords": [],
         "category": "Oftalmologia",
-        "clinic_1": "Lekar na dialku (oftalmolog)",
-        "clinic_2": "Fokus",
-        "benefit": "Laserova operacia, zdravé oči"
+        "benefit": "Laserova operacia, zdravé oči",
+        "screen_1_id": 1,
+        "screen_2_id": 12
       },
       {
         "id": "rule_dental",
@@ -948,9 +1058,9 @@
         ],
         "exclude_keywords": [],
         "category": "Stomatologia",
-        "clinic_1": "Zdrave zuby",
-        "clinic_2": "Zlava kefka Sonicare",
-        "benefit": "Dr. Max"
+        "benefit": "Dr. Max",
+        "screen_1_id": 13,
+        "screen_2_id": 14
       },
       {
         "id": "rule_alergies",
@@ -1015,9 +1125,9 @@
         ],
         "exclude_keywords": [],
         "category": "Alergologia",
-        "clinic_1": "Lekar na dialku (gastroenterolog)",
-        "clinic_2": "Unilabs",
-        "benefit": "Páleník jedálničky, Dr.Max, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie"
+        "benefit": "Páleník jedálničky, Dr.Max, DNA4Fit, Vitacelia, Bobule, Knihy od Raabe, Kniha Pestro a zdravšie",
+        "screen_1_id": 1,
+        "screen_2_id": 10
       },
       {
         "id": "reproduction",
@@ -1074,35 +1184,28 @@
           "asistovana reprodukcia": 8,
           "reprogenesis": 8,
           "repromedica": 8,
-
           "neplodnost": 7,
           "nemozem otehotniet": 7,
           "neviem otehotniet": 7,
           "problem s otehotnenim": 7,
           "snazime sa o dieta": 6,
           "neuspesne otehotnenie": 6,
-
           "opakovany potrat": 7,
           "spontanny potrat": 6,
           "potraty": 5,
-
           "pcos": 6,
           "pco": 6,
           "polycysticke vajecniky": 7,
           "endometrioza": 7,
-
           "amenorea": 6,
           "vynechanie menstruacie": 5,
           "nepravidelny cyklus": 5,
           "menstruacia nepravidelna": 5,
-
           "hormonalna nerovnovaha": 5,
           "slaba ovulacia": 6,
           "neprebieha ovulacia": 6,
-
           "nizka plodnost": 6,
           "plodnost problem": 6,
-
           "mužska neplodnost": 7,
           "zenska neplodnost": 7,
           "spermie problem": 5,
@@ -1110,9 +1213,9 @@
         },
         "min_score": 3,
         "category": "Reprodukčné problémy",
-        "clinic_1": "Reprogenesis",
-        "clinic_2": "Repromedica",
-        "benefit": "Článok o úhrade IVF"
+        "benefit": "Článok o úhrade IVF",
+        "screen_1_id": 16,
+        "screen_2_id": 15
       }
     ]
   }

@@ -239,7 +239,7 @@
       <header>
         <div>
           <h1>Benefit Router</h1>
-          <p>Zadajte symptomy a API vrati vybranu kategoriu, sluzby a benefit.</p>
+          <p>Zadajte symptomy a API vrati vybranu kategoriu a screen ID.</p>
         </div>
         <nav aria-label="API links">
           <a href="/docs">API docs</a>
@@ -273,16 +273,12 @@
               <div id="category" class="value">-</div>
             </div>
             <div class="row">
-              <div class="key">Clinic 1</div>
-              <div id="clinic1" class="value">-</div>
+              <div class="key">Screen 1</div>
+              <div id="screen1" class="value">-</div>
             </div>
             <div class="row">
-              <div class="key">Clinic 2</div>
-              <div id="clinic2" class="value">-</div>
-            </div>
-            <div class="row">
-              <div class="key">Benefit</div>
-              <div id="benefit" class="value">-</div>
+              <div class="key">Screen 2</div>
+              <div id="screen2" class="value">-</div>
             </div>
           </div>
           <pre id="raw-output">{}</pre>
@@ -305,21 +301,26 @@
       const fields = {
         userId: document.querySelector("#userId"),
         category: document.querySelector("#category"),
-        clinic1: document.querySelector("#clinic1"),
-        clinic2: document.querySelector("#clinic2"),
-        benefit: document.querySelector("#benefit")
+        screen1: document.querySelector("#screen1"),
+        screen2: document.querySelector("#screen2")
       };
 
       function setText(element, value) {
         element.textContent = value || "-";
       }
 
+      function formatScreen(screen) {
+        if (!screen) {
+          return "-";
+        }
+        return `${screen.ID} - ${screen.ItemName}`;
+      }
+
       function renderResult(data) {
         setText(fields.userId, data.user_id);
         setText(fields.category, data.category);
-        setText(fields.clinic1, data.clinic_1);
-        setText(fields.clinic2, data.clinic_2);
-        setText(fields.benefit, data.benefit);
+        setText(fields.screen1, formatScreen(data.screen_1));
+        setText(fields.screen2, formatScreen(data.screen_2));
         rawOutput.textContent = JSON.stringify(data, null, 2);
       }
 

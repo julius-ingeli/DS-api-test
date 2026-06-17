@@ -11,10 +11,8 @@ class RouteResponse(BaseModel):
     user_id: Optional[str] = None
 
     category: Optional[str]
-    clinic_1: Optional[str]
-    clinic_2: Optional[str]
-    benefit: Optional[str]
-
+    screen_1: Optional[Dict[str, Any]]
+    screen_2: Optional[Dict[str, Any]]
     matched_rules: List[str]
     selected_rule: Optional[str]
 

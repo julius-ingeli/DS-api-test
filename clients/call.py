@@ -46,10 +46,8 @@ if __name__ == "__main__":
     print("\n=== Summary ===")
     
     print("Category:", resp.get("category"))
-    print("Clinic 1:", resp.get("clinic_1"))
-    print("Clinic 2:", resp.get("clinic_2"))
-    print("Benefit:", resp.get("benefit"))
-
+    print("Screen 1:", resp.get("screen_1"))
+    print("Screen 2:", resp.get("screen_2"))
     print("Selected rule:", resp.get("selected_rule"))
     print("Matched rules:", ", ".join(resp.get("matched_rules", [])))
     print("Fallback used:", resp.get("fallback_used"))

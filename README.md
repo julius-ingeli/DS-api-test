@@ -1,6 +1,6 @@
 # Benefit Router API
 
-Benefit Router API is a small FastAPI service for public testing of symptom-to-benefit routing. A user enters symptom text, the engine evaluates it against `rules/rules.json`, and the API returns a selected category, service/clinic suggestions, a benefit, trace data, and a timestamp-based `user_id` that is also written to the route log.
+Benefit Router API is a small FastAPI service for public testing of symptom routing. A user enters symptom text, the engine evaluates it against `rules/rules.json`, and the API returns a selected category, screen suggestions, trace data, and a timestamp-based `user_id` that is also written to the route log.
 
 This README is intentionally bilingual. Slovak documentation is first, English documentation follows.
 
@@ -10,7 +10,7 @@ This README is intentionally bilingual. Slovak documentation is first, English d
 
 ## Prehlad
 
-Benefit Router API je jednoducha REST sluzba s verejnou testovacou strankou. Pouzivatel zada symptomy, aplikacia ich normalizuje, porovna s pravidlami v `rules/rules.json` a vrati odporucanu kategoriu, dve sluzby/ambulancie a benefit.
+Benefit Router API je jednoducha REST sluzba s verejnou testovacou strankou. Pouzivatel zada symptomy, aplikacia ich normalizuje, porovna s pravidlami v `rules/rules.json` a vrati odporucanu kategoriu a dva screen objekty.
 
 Projekt nepouziva LLM ani generativne hadanie. Vysledok je deterministicky a zalezi iba od pravidiel v JSON subore a matching logiky v kode.
 
@@ -51,9 +51,8 @@ Stranka zobrazi pole na zadanie symptomov a output panel s hodnotami:
 
 - `user_id`
 - `category`
-- `clinic_1`
-- `clinic_2`
-- `benefit`
+- `screen_1`
+- `screen_2`
 - raw JSON odpoved API
 
 ## Priame volanie API
@@ -93,13 +92,22 @@ Priklad uspechu:
 {
   "user_id": "20260615T142530123456Z",
   "category": "AIP_DERM",
-  "clinic_1": "Lekár na diaľku (Dermatológ)",
-  "clinic_2": "AIP Derm",
-  "benefit": "Facederma, DNA4Fit, Ksebe zadarmo",
+  "screen_1": {
+    "ID": 1,
+    "ItemName": "MEDDI (Lekár na diaľku)",
+    "Title": "OnlineClinic.Title.Meddi",
+    "Text": "OnlineClinicText.Meddi"
+  },
+  "screen_2": {
+    "ID": 3,
+    "ItemName": "AIP Derm",
+    "Title": "OnlineClinic.Title.Derm",
+    "Text": "OnlineClinicText.Derm"
+  },
   "matched_rules": ["rule_skin"],
   "selected_rule": "rule_skin",
   "fallback_used": false,
-  "version": "0.9",
+  "version": "0.10",
   "trace": {
     "normalized_input": "mam vyrazku na kozi",
     "scores": [],
@@ -147,7 +155,21 @@ Aktivny rules subor ma format:
 
 ```json
 {
-  "version": "0.9",
+  "version": "0.10",
+  "screens": {
+    "1": {
+      "ID": 1,
+      "ItemName": "MEDDI (Lekár na diaľku)",
+      "Title": "OnlineClinic.Title.Meddi",
+      "Text": "OnlineClinicText.Meddi"
+    },
+    "3": {
+      "ID": 3,
+      "ItemName": "AIP Derm",
+      "Title": "OnlineClinic.Title.Derm",
+      "Text": "OnlineClinicText.Derm"
+    }
+  },
   "logic": {
     "rules": [
       {
@@ -160,17 +182,15 @@ Aktivny rules subor ma format:
         },
         "min_score": 1,
         "category": "AIP_DERM",
-        "clinic_1": "Lekár na diaľku (Dermatológ)",
-        "clinic_2": "AIP Derm",
-        "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+        "screen_1_id": 1,
+        "screen_2_id": 3
       },
       {
         "id": "rule_fallback",
         "match_type": "fallback",
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku",
-        "clinic_2": "Samodiagnostika",
-        "benefit": "Dr. Max"
+        "screen_1_id": 1,
+        "screen_2_id": 4
       }
     ]
   }
@@ -183,9 +203,15 @@ Povinne polia pre `keyword_any` pravidlo:
 - `match_type: "keyword_any"`
 - `keywords`
 - `category`
-- `clinic_1`
-- `clinic_2`
-- `benefit`
+- `screen_1_id`
+- `screen_2_id`
+
+`screen_1_id` a `screen_2_id` referencuju objekt v top-level `screens`. Kazdy screen objekt obsahuje:
+
+- `ID`
+- `ItemName`
+- `Title`
+- `Text`
 
 Volitelne polia:
 
@@ -193,8 +219,9 @@ Volitelne polia:
 - `keyword_weights`
 - `min_score`
 
-Fallback pravidlo musi mat `match_type: "fallback"` a vystupne polia `category`, `clinic_1`, `clinic_2`, `benefit`.
+Fallback pravidlo musi mat `match_type: "fallback"` a vystupne polia `category`, `screen_1_id`, `screen_2_id`.
 
+Poznamka: existujuce pravidla mozu stale obsahovat pole `benefit`, ale verejny API output ho uz nevracia. Top-level `screens` objekt vychadza z `ids.md`; pravidla referencuju iba `screen_1_id` a `screen_2_id`, aby sa texty dali menit centralne v `screens`.
 
 ## Logovanie vstupov a vystupov
 
@@ -214,9 +241,18 @@ Log je JSON Lines subor. Kazdy riadok je jeden request:
   "output": {
     "user_id": "20260615T142530123456Z",
     "category": "AIP_DERM",
-    "clinic_1": "Lekár na diaľku (Dermatológ)",
-    "clinic_2": "AIP Derm",
-    "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+    "screen_1": {
+      "ID": 1,
+      "ItemName": "MEDDI (Lekár na diaľku)",
+      "Title": "OnlineClinic.Title.Meddi",
+      "Text": "OnlineClinicText.Meddi"
+    },
+    "screen_2": {
+      "ID": 3,
+      "ItemName": "AIP Derm",
+      "Title": "OnlineClinic.Title.Derm",
+      "Text": "OnlineClinicText.Derm"
+    }
   }
 }
 ```
@@ -325,7 +361,7 @@ requirements.txt       Python dependencies
 
 ## Overview
 
-Benefit Router API is a lightweight REST service with a public testing page. A user enters symptoms, the app normalizes the text, evaluates it against `rules/rules.json`, and returns a selected category, two service/clinic suggestions, a benefit, trace data, and a timestamp-based `user_id` that is also written to the route log.
+Benefit Router API is a lightweight REST service with a public testing page. A user enters symptoms, the app normalizes the text, evaluates it against `rules/rules.json`, and returns a selected category, two screen suggestions, trace data, and a timestamp-based `user_id` that is also written to the route log.
 
 The project does not use an LLM or generative guessing. The result is deterministic and depends only on the JSON rules and the matching logic in the code.
 
@@ -366,9 +402,8 @@ The page shows a symptom input and an output panel with:
 
 - `user_id`
 - `category`
-- `clinic_1`
-- `clinic_2`
-- `benefit`
+- `screen_1`
+- `screen_2`
 - raw API JSON response
 
 ## Direct API usage
@@ -408,13 +443,22 @@ Example successful response:
 {
   "user_id": "20260615T142530123456Z",
   "category": "AIP_DERM",
-  "clinic_1": "Lekár na diaľku (Dermatológ)",
-  "clinic_2": "AIP Derm",
-  "benefit": "Facederma, DNA4Fit, Ksebe zadarmo",
+  "screen_1": {
+    "ID": 1,
+    "ItemName": "MEDDI (Lekár na diaľku)",
+    "Title": "OnlineClinic.Title.Meddi",
+    "Text": "OnlineClinicText.Meddi"
+  },
+  "screen_2": {
+    "ID": 3,
+    "ItemName": "AIP Derm",
+    "Title": "OnlineClinic.Title.Derm",
+    "Text": "OnlineClinicText.Derm"
+  },
   "matched_rules": ["rule_skin"],
   "selected_rule": "rule_skin",
   "fallback_used": false,
-  "version": "0.9",
+  "version": "0.10",
   "trace": {
     "normalized_input": "mam vyrazku na kozi",
     "scores": [],
@@ -462,7 +506,21 @@ The active rules file has this shape:
 
 ```json
 {
-  "version": "0.9",
+  "version": "0.10",
+  "screens": {
+    "1": {
+      "ID": 1,
+      "ItemName": "MEDDI (Lekár na diaľku)",
+      "Title": "OnlineClinic.Title.Meddi",
+      "Text": "OnlineClinicText.Meddi"
+    },
+    "3": {
+      "ID": 3,
+      "ItemName": "AIP Derm",
+      "Title": "OnlineClinic.Title.Derm",
+      "Text": "OnlineClinicText.Derm"
+    }
+  },
   "logic": {
     "rules": [
       {
@@ -475,17 +533,15 @@ The active rules file has this shape:
         },
         "min_score": 1,
         "category": "AIP_DERM",
-        "clinic_1": "Lekár na diaľku (Dermatológ)",
-        "clinic_2": "AIP Derm",
-        "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+        "screen_1_id": 1,
+        "screen_2_id": 3
       },
       {
         "id": "rule_fallback",
         "match_type": "fallback",
         "category": "Neindentifikovane",
-        "clinic_1": "Lekar na dialku",
-        "clinic_2": "Samodiagnostika",
-        "benefit": "Dr. Max"
+        "screen_1_id": 1,
+        "screen_2_id": 4
       }
     ]
   }
@@ -498,9 +554,15 @@ Required fields for a `keyword_any` rule:
 - `match_type: "keyword_any"`
 - `keywords`
 - `category`
-- `clinic_1`
-- `clinic_2`
-- `benefit`
+- `screen_1_id`
+- `screen_2_id`
+
+`screen_1_id` and `screen_2_id` reference an object in top-level `screens`. Each screen object contains:
+
+- `ID`
+- `ItemName`
+- `Title`
+- `Text`
 
 Optional fields:
 
@@ -508,8 +570,9 @@ Optional fields:
 - `keyword_weights`
 - `min_score`
 
-The fallback rule must have `match_type: "fallback"` and output fields `category`, `clinic_1`, `clinic_2`, and `benefit`.
+The fallback rule must have `match_type: "fallback"` and output fields `category`, `screen_1_id`, and `screen_2_id`.
 
+Note: existing rules may still contain a `benefit` field, but the public API output no longer returns it. The top-level `screens` object comes from `ids.md`; rules reference only `screen_1_id` and `screen_2_id` so texts can be changed centrally in `screens`.
 
 ## Input/output logging
 
@@ -529,9 +592,18 @@ The log is a JSON Lines file. Each line is one request:
   "output": {
     "user_id": "20260615T142530123456Z",
     "category": "AIP_DERM",
-    "clinic_1": "Lekár na diaľku (Dermatológ)",
-    "clinic_2": "AIP Derm",
-    "benefit": "Facederma, DNA4Fit, Ksebe zadarmo"
+    "screen_1": {
+      "ID": 1,
+      "ItemName": "MEDDI (Lekár na diaľku)",
+      "Title": "OnlineClinic.Title.Meddi",
+      "Text": "OnlineClinicText.Meddi"
+    },
+    "screen_2": {
+      "ID": 3,
+      "ItemName": "AIP Derm",
+      "Title": "OnlineClinic.Title.Derm",
+      "Text": "OnlineClinicText.Derm"
+    }
   }
 }
 ```

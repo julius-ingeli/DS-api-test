@@ -19,6 +19,21 @@ def load_rules():
     if not isinstance(cfg["logic"]["rules"], list) or len(cfg["logic"]["rules"]) == 0:
         raise ValueError("Invalid rules: logic.rules must be a non-empty list")
 
+    if "screens" not in cfg or not isinstance(cfg["screens"], dict):
+        raise ValueError("Invalid rules: missing screens")
+
+    for screen_id, screen in cfg["screens"].items():
+        if not isinstance(screen, dict):
+            raise ValueError(f"Invalid screen {screen_id}: must be an object")
+        for field in ("ID", "ItemName", "Title", "Text"):
+            if field not in screen:
+                raise ValueError(f"Invalid screen {screen_id}: missing {field}")
+
+    for rule in cfg["logic"]["rules"]:
+        for key in ("screen_1_id", "screen_2_id"):
+            if key in rule and str(rule[key]) not in cfg["screens"]:
+                raise ValueError(f"Invalid rule {rule.get('id')}: unknown {key} {rule[key]}")
+
     # Skontroluj prítomnosť fallbacku
     has_fb = any(r.get("match_type") == "fallback" for r in cfg["logic"]["rules"])
     if not has_fb:

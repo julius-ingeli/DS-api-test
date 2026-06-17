@@ -8,20 +8,22 @@ from app.utils import normalize_text
 def _get_category(rule: Dict[str, Any]) -> Optional[str]:
     return rule.get("category")
 
-def _collect_clinics(rule: Dict[str, Any]) -> List[str]:
-    out = []
-    for key in ("clinic_1", "clinic_2"):
-        val = rule.get(key)
-        if isinstance(val, str) and val.strip():
-            out.append(val.strip())
-    return out
-
-
-def _get_benefit(rule: Dict[str, Any]) -> Optional[str]:
-    val = rule.get("benefit")
-    if isinstance(val, str) and val.strip():
-        return val.strip()
+def _get_screen(screen_id: Any) -> Optional[Dict[str, Any]]:
+    if screen_id is None:
+        return None
+    screen = cfg.get("screens", {}).get(str(screen_id))
+    if isinstance(screen, dict):
+        return dict(screen)
     return None
+
+
+def _collect_screens(rule: Dict[str, Any]) -> List[Dict[str, Any]]:
+    out = []
+    for key in ("screen_1_id", "screen_2_id"):
+        screen = _get_screen(rule.get(key))
+        if screen is not None:
+            out.append(screen)
+    return out
 
 
 def _default_weight(term: str) -> int:
@@ -113,7 +115,7 @@ def route_symptoms(symptom_source: str, symptom_value: str) -> Dict[str, Any]:
                 "hits": result["hits"]
             })
 
-    # 2) Zisti, kolko roznych klinik matchlo
+    # 2) Zisti, kolko roznych kategorii matchlo
     distinct_categories = sorted({
         e["category"] for e in eligible_rules if e["category"] is not None
     })
@@ -122,20 +124,20 @@ def route_symptoms(symptom_source: str, symptom_value: str) -> Dict[str, Any]:
     fallback_used = False
     ambiguity_fallback = False
 
-    # 3) Ak matchlo viac klinik naraz -> fallback
+    # 3) Ak matchlo viac kategorii naraz -> fallback
     if len(distinct_categories) > 1:
         best_rule = fallback_rule
         fallback_used = True
         ambiguity_fallback = True
         best_score = -1
 
-    # 4) Ak matchla prave jedna klinika -> vyber najlepsi rule
+    # 4) Ak matchla prave jedna kategoria -> vyber najlepsi rule
     elif len(eligible_rules) == 1:
         best_rule = eligible_rules[0]["rule"]
         best_score = eligible_rules[0]["score"]
 
     elif len(eligible_rules) > 1:
-        # viac rules, ale stale ta ista klinika
+        # viac rules, ale stale ta ista kategoria
         best = max(eligible_rules, key=lambda x: x["score"])
         best_rule = best["rule"]
         best_score = best["score"]
@@ -149,20 +151,16 @@ def route_symptoms(symptom_source: str, symptom_value: str) -> Dict[str, Any]:
 
 
     selected_category = _get_category(best_rule) if best_rule else None
-    selected_clinics = _collect_clinics(best_rule) if best_rule else []
-    selected_benefit = _get_benefit(best_rule) if best_rule else None
-
-    c1 = selected_clinics[0] if len(selected_clinics) > 0 else None
-    c2 = selected_clinics[1] if len(selected_clinics) > 1 else None
+    selected_screens = _collect_screens(best_rule) if best_rule else []
+    s1 = selected_screens[0] if len(selected_screens) > 0 else None
+    s2 = selected_screens[1] if len(selected_screens) > 1 else None
 
 
 
     return {
         "category": selected_category,
-        "clinic_1": c1,
-        "clinic_2": c2,
-        "benefit": selected_benefit,
-
+        "screen_1": s1,
+        "screen_2": s2,
         "matched_rules": [e["rule"]["id"] for e in eligible_rules],
         "selected_rule": best_rule.get("id") if best_rule else None,
         "fallback_used": fallback_used,
